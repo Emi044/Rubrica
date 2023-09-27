@@ -3,24 +3,33 @@ using System.Text.Json.Serialization;
 
 const string file = "rubrica.json";
 
-Lista();
+Lista(ReadRubrica());
 
-string str = Console.ReadLine();
+var str = Console.ReadLine();
 
 if (args.Length > 0)
 {
     if (args[0] == "lista")
-        Lista();
+        Lista(ReadRubrica());
     else if (args[0] == "cerca")
     {
-        ReadRubrica().ForEach(contact =>
-        {
-            if (contact.Contains(args[1]))
-                Console.WriteLine(contact.Nome);
-        });
+        Lista(Cerca(args[1]));
     }
 }
+else
+{
+    Console.WriteLine("ciao");
+}
 
+List<Contatto> Cerca(string s)
+{
+    var l = new List<Contatto>();
+    foreach (var c in ReadRubrica())
+    {
+        if (c.Contains(s)) l.Add(c);
+    }
+    return l;
+}
 
 Contatto Deserializza(string json)
 {
@@ -32,9 +41,9 @@ Contatto Deserializza(string json)
 
     return contatto;
 }
-void Lista()
+void Lista(List<Contatto> l)
 {
-    foreach (Contatto contatto in ReadRubrica())
+    foreach (Contatto contatto in l)
     {
         Console.WriteLine(contatto.Nome + ' ' + contatto.Cognome + ": " + contatto.Numero);
     }
